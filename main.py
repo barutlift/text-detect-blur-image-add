@@ -3,22 +3,21 @@ import cv2
 from moviepy.editor import VideoFileClip
 import os
 
-
-model = YOLO("model/best.pt")
+model = YOLO("model/best26k50epok.pt")
 names = model.names
 
-video_folder = "videos"
+video_folder = "videolar"
 
-output_folder = "audiovideos_cropped"
+output_folder = "seslivideolar_cropped"
 
 os.makedirs(output_folder, exist_ok=True)
 
 def process_video(input_path, output_path):
     cap = cv2.VideoCapture(input_path)
-    assert cap.isOpened(), "error"
+    assert cap.isOpened(), "Video okunurken hata oluştu"
     w, h, fps = (int(cap.get(x)) for x in (cv2.CAP_PROP_FRAME_WIDTH, cv2.CAP_PROP_FRAME_HEIGHT, cv2.CAP_PROP_FPS))
 
-    overlay_img = cv2.imread('logoimage.png', cv2.IMREAD_UNCHANGED)
+    overlay_img = cv2.imread('onlyluxuryvip2.png', cv2.IMREAD_UNCHANGED)
 
     video_writer = cv2.VideoWriter(output_path,
                                    cv2.VideoWriter_fourcc(*'mp4v'),
@@ -29,7 +28,7 @@ def process_video(input_path, output_path):
     while cap.isOpened():
         success, im0 = cap.read()
         if not success:
-            print("success.")
+            print("Video başarıyla işlendi.")
             break
 
         results = model.predict(im0, show=False)
@@ -66,7 +65,7 @@ def process_video(input_path, output_path):
                 ]
 
                 obj = im0[expanded_box[1]:expanded_box[3], expanded_box[0]:expanded_box[2]]
-                blur_obj = cv2.medianBlur(obj, 299) 
+                blur_obj = cv2.medianBlur(obj, 249) 
                 im0[expanded_box[1]:expanded_box[3], expanded_box[0]:expanded_box[2]] = blur_obj
 
                 detected_width = expanded_box[2] - expanded_box[0]
